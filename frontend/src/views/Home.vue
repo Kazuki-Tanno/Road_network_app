@@ -1,6 +1,13 @@
 <template>
 <div>
-  this is home.vue
+  this is home.vue<br>
+  <v-file-input
+  accept=".json, .geojson"
+  label="File input"
+  small-chips
+  @change="getFileContent"
+  ></v-file-input>
+  {{ contents }}
 </div>
 </template>
 
@@ -14,7 +21,8 @@ export default {
   data () {
     return {
       // 入力データ
-      shop_info: null
+      files: [],
+      contents: ''
     }
   },
 
@@ -27,9 +35,29 @@ export default {
   // 監視プロパティ
   watch: {},
 
-  mounted () {},
+  mounted () { },
 
-  // メソッドプロパティ
-  methods: { }
+  methods: {
+    
+    // 入力ファイルの読み込み
+    async getFileContent (file) {
+      try {
+        const content = await this.readFileAsync(file)
+        this.contents = JSON.parse(content)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    readFileAsync (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          resolve(reader.result)
+        }
+        reader.onerror = reject
+        reader.readAsText(file)
+      })
+    }
+  }
 }
 </script>
