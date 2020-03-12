@@ -9,7 +9,11 @@ verify_ssl = true
 flask = "*"
 gunicorn = "*"
 flask-restful = "*"
-requests = "*"
+networkx = "*"
+matplotlib = "*"
+numpy = "*"
+osmnx = "==0.10"
+geojson = "*"
 
 [requires]
 python_version = "3.7"

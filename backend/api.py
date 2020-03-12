@@ -5,6 +5,11 @@ from flask_restful import Api, Resource
 import time
 import requests
 import json
+import osmnx as ox
+import networkx as nx
+import numpy as np
+import geojson
+from shapely.geometry import shape
 
 
 # loginを扱うapi(POSTメソッド)
