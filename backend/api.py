@@ -19,6 +19,7 @@ class Post_GeoJson(Resource):
         
         # データをフロントエンドから受け取る
         input_data = request.json
+        print(type(input_data))
 
         if 'status' in input_data:
             return_data = {'IsStatus':1}

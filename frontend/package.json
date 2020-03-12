@@ -25,8 +25,6 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
     "install": "^0.13.0",
-    "leaflet": "^1.0.3",
-    "leaflet-draw": "^1.0.4",
     "npm": "^6.14.2",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",

@@ -8,7 +8,7 @@
 
 <script>
 //import axios from 'axios'
-import L from 'leaflet'
+import L from "leaflet"
 
 export default {
   name: 'HomePage',
