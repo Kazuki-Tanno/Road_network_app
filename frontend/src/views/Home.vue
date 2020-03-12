@@ -8,11 +8,15 @@
   @change="getFileContent"
   ></v-file-input>
   {{ contents }}
+  <br>
+  <v-btn @click="SendData">データ送信</v-btn>
+  <br>
+  {{ result }}
 </div>
 </template>
 
 <script>
-//import axios from 'axios'
+import axios from 'axios'
 
 export default {
   name: 'HomePage',
@@ -22,7 +26,8 @@ export default {
     return {
       // 入力データ
       files: [],
-      contents: ''
+      contents: '',
+      result: ''
     }
   },
 
@@ -57,6 +62,27 @@ export default {
         reader.onerror = reject
         reader.readAsText(file)
       })
+    },
+
+    // バックエンドへの送信
+    SendData: function(){
+
+        // データが入力されていないとき
+        if (this.contents==='') {
+            alert('入力ファイルを指定してください')
+        }
+        //データが入力されている
+        else{
+            axios
+            .post('/api/post', this.contents)
+            .then(response => {
+            this.result = response.data
+            })
+            .catch(err => {
+                alert('APIサーバと接続できません')
+                console.log(err)
+            })
+        }
     }
   }
 }
