@@ -10,6 +10,9 @@ module.exports = {
   chainWebpack: config => {
     config.externals({
       leaflet: 'L'
-    })
-  }
+    }),
+    config.performance
+      .maxEntrypointSize(400000)
+      .maxAssetSize(400000)
+  },
 }

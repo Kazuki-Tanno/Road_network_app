@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest ../dist",
+    "build": "vue-cli-service build --dest ../dist --report",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -36,5 +36,10 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
+  },
+  "eslintConfig": {
+    "rules": {
+      "no-console": "warn"
+    }
   }
 }
