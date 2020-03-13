@@ -8,6 +8,7 @@
 	<v-btn @click="SearchSpot">検索</v-btn>
   <v-list
     :two-line="true"
+		dense
   >
     <v-list-item-group color="blown">
       <v-list-item
