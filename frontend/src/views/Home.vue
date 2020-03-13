@@ -10,6 +10,7 @@
   {{ contents }}
   <br>
   <v-btn @click="SendData">データ送信</v-btn>
+  <v-btn @click="ToMap">Map</v-btn>
   <br>
   {{ result }}
 </div>
@@ -83,6 +84,11 @@ export default {
                 console.log(err)
             })
         }
+    },
+
+    // Map.vueへ移動
+    ToMap: function(){
+        this.$router.push({ path: '/map' })
     }
   }
 }
