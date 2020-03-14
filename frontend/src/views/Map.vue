@@ -64,9 +64,7 @@ export default {
 			var drawnItems = new L.FeatureGroup().addTo(this.map);
 			var drawControl = new L.Control.Draw({
 				draw: {
-					circle: {
-						feet: false
-					},
+					circle: false,
 					polyline: false,
 					marker: false
 				},
