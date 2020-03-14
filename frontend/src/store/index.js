@@ -5,10 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    Network: {}
   },
   mutations: {
+    UpdateNetwork(state, payload){
+      state.Network = payload
+    }
   },
   actions: {
+    UpdateNetwork(context, payload){
+      context.commit('UpdateNetwork', payload);
+    }
   },
   modules: {
   }

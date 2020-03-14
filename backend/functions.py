@@ -133,7 +133,7 @@ def G_geo_to_G_xy(G_geo, locating_point):
         y = G_geo_all_node[i]['y']
         
         d_x,d_y = calc_xy(y, x, locating_point[0], locating_point[1])
-        G_xy.add_node(num,pos=[d_y,d_x], latlon=[y,x])
+        G_xy.add_node(num,pos=[round(d_y,4),round(d_x,4)], latlon=[y,x])
         
         num += 1
         
@@ -143,9 +143,9 @@ def G_geo_to_G_xy(G_geo, locating_point):
         
         start_node = change_dict[i[0]]
         end_node = change_dict[i[1]]
-        weight = culc_weight(G_xy_all_node[start_node]['pos'], G_xy_all_node[end_node]['pos'])
+        #weight = culc_weight(G_xy_all_node[start_node]['pos'], G_xy_all_node[end_node]['pos'])
         
-        G_xy.add_edge(start_node,end_node,weight=weight)
+        G_xy.add_edge(start_node,end_node)
     
     return G_xy, reverse_dict
 
@@ -165,8 +165,8 @@ def remove_G(G, remove_node, new_edge):
     
     G.remove_node(remove_node)
         
-    weight = culc_weight(G_all_node[new_edge[0]]['pos'], G_all_node[new_edge[1]]['pos'])
-    G.add_edge(new_edge[0],new_edge[1],weight=weight)
+    #weight = culc_weight(G_all_node[new_edge[0]]['pos'], G_all_node[new_edge[1]]['pos'])
+    #G.add_edge(new_edge[0],new_edge[1],weight=weight)
     
     return G
 
@@ -193,6 +193,8 @@ def renumber(G):
         
         num += 1
     
+    # 辺の長さは計算しない
+    """
     for i in all_edge:
         
         start_node = change_dict[i[0]]
@@ -200,6 +202,7 @@ def renumber(G):
         weight = all_edge[i]['weight']
         
         new_G.add_edge(start_node,end_node,weight=weight)
+    """
     
     return new_G
 
@@ -274,7 +277,44 @@ def recreate_G(G, limit_degree):
             remove_G(G, i, new_edge)
 
     return G
-    
+
+def G_to_JSON(G):
+    """
+    ネットワークの情報をJSONに落とす関数
+    -input:
+        G : networkxのGraph
+    -output:
+        g_json : nodeとedgeが保存されたJSON
+        {
+            'node':[
+                { 'id':0, 'pos':[65.4677, 23.3979], 'latlon':[35.67867, 139.564] },
+                ...
+            ],
+            'edge': [
+                [ 0, 1 ]
+            ]
+        }
+    """
+
+    all_nodes = dict(G.nodes())
+
+    # ノードのjsonを作成
+    node_json = [
+        {'id':index, 'pos':item['pos'], 'latlon':item['latlon']}
+        for index, item in all_nodes.items()
+    ]
+
+    # エッジのjsonを作成
+    edge_json = [
+        list(edge)
+        for edge in G.edges()
+    ]
+
+    # jsonにまとめて整形
+    g_json = {'node':node_json, 'edge':edge_json}
+
+    return g_json
+
 
 def G_to_Dataframe(G):
     

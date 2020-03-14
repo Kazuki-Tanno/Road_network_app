@@ -23,8 +23,10 @@
     </v-list-item-group>
   </v-list>
   <br>
-  <div id="map" style="width:100%; height:600px"></div>
 	<v-btn @click="MakeGeoJson">Geojson</v-btn>
+	<v-btn @click="ToHome">ホームへ</v-btn>
+  <div id="map" style="width:100%; height:600px"></div>
+	
 </div>
 </template>
 
@@ -42,7 +44,8 @@ export default {
       map: null,
       SpotList: null,
 			SearchString: '',
-			ExportItems: null
+			ExportItems: null,
+			Status: 0
     }
   },
 
@@ -93,11 +96,11 @@ export default {
         .get(QueryString)
         .then(response => {
             this.SpotList=response.data;
-            console.log(this.SpotList)
+            //console.log(this.SpotList)
             })
         .catch(err => {
             alert('APIサーバと接続できません');
-            print(err)
+            //print(err)
         });
 		},
 
@@ -117,11 +120,17 @@ export default {
 			
 			var return_data = this.ExportItems.toGeoJSON()
 			if (return_data['features'].length > 0) {
-				console.log(return_data)
+				//console.log(return_data)
 				axios
-				.post('/api/post', return_data)
+				.post('/api/post_geojson', return_data)
         .then(response => {
-          console.log(response.data)
+					this.Status = response.data['Status']
+					//console.log(this.Status)
+
+					// storeのデータを上書き
+					this.$store.dispatch('UpdateNetwork', response.data['Network'])
+					//console.log(this.Status)
+					//console.log(this.$store.state.Network)
         })
         .catch(err => {
           alert('APIサーバと接続できません')
@@ -130,6 +139,11 @@ export default {
 			else{
 				alert('geojsonを作成してください')
 			}
+		},
+
+		//ホームへ
+		ToHome: function(){
+			this.$router.push({ path: '/' })
 		}
   }
 }
@@ -137,7 +151,7 @@ export default {
 
 <style>
 .v-list{
-  height:400px;/* or any height you want */
+  height:200px;/* or any height you want */
 	overflow-y:auto;
 }
 </style>

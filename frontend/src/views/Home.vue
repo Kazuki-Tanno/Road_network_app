@@ -11,6 +11,7 @@
   <br>
   <v-btn @click="SendData">データ送信</v-btn>
   <v-btn @click="ToMap">Map</v-btn>
+  <v-btn @click="ShowNet">データをコンソール</v-btn>
   <br>
   {{ result }}
 </div>
@@ -75,7 +76,7 @@ export default {
         //データが入力されている
         else{
             axios
-            .post('/api/post', this.contents)
+            .post('/api/post_geojson', this.contents)
             .then(response => {
             this.result = response.data
             })
@@ -89,6 +90,11 @@ export default {
     // Map.vueへ移動
     ToMap: function(){
         this.$router.push({ path: '/map' })
+    },
+
+    // storeのデータを表示
+    ShowNet: function(){
+        console.log(this.$store.state.Network)
     }
   }
 }

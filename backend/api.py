@@ -16,39 +16,54 @@ import gc
 import functions as fnc
 
 
-# loginを扱うapi(POSTメソッド)
-post_geojson_bp = Blueprint('post_geojson', __name__, url_prefix='/api/post')
+# geojsonを受け取るapi(POSTメソッド)
+# ネットワークを作成し，Statusを返す
+post_geojson_bp = Blueprint('post_geojson', __name__, url_prefix='/api/post_geojson')
 class Post_GeoJson(Resource):
     def post(self):
         
-        # データをフロントエンドから受け取る
-        input_data = request.json
-        print(type(input_data))
+        try:
+            # データをフロントエンドから受け取る
+            input_data = request.json
 
-        # 辞書 -> 文字列 -> geojsonに変換
-        src = json.dumps(input_data)
-        src = geojson.loads(src)
-        print(type(src))
+            # 辞書 -> 文字列 -> geojsonに変換
+            src = json.dumps(input_data)
+            src = geojson.loads(src)
 
-        # shapelyのポリゴン形式に変更
-        ftr = src.get('features')[0]
-        polygon = shape(ftr.get('geometry'))
+            # shapelyのポリゴン形式に変更
+            ftr = src.get('features')[0]
+            polygon = shape(ftr.get('geometry'))
 
-        # ポリゴンからnetworkxオブジェクトを生成
-        G_osm = ox.graph_from_polygon(polygon, simplify=False, network_type='drive')
+            # ポリゴンからnetworkxオブジェクトを生成
+            G_osm = ox.graph_from_polygon(polygon, simplify=False, network_type='drive')
 
-        # xy座標系に変換
-        # 変換の際の中心座標
-        locating_point = fnc.culc_center_latlon(G_osm)
-        print(locating_point)
-        G, _ = fnc.G_geo_to_G_xy(G_osm, locating_point)
+            # xy座標系に変換
+            # 変換の際の中心座標
+            locating_point = fnc.culc_center_latlon(G_osm)
+            G, _ = fnc.G_geo_to_G_xy(G_osm, locating_point)
 
-        del G_osm
-        gc.collect()
+            del G_osm
+            gc.collect()
 
-        print(dict(G.nodes()))
+            # ネットワークをjson形式に変更
+            graph_json = fnc.G_to_JSON(G)
+            print('done')
+            
+            # session変数に基礎ネットワークを作成済みかを入力
+            session['done_network'] = 1
 
-        # limit
+            # すべてが成功した場合
+            return_data = {
+                'Status':1,
+                'Network':graph_json
+            }
+
+        except:
+            # エラーの場合
+            return_data = {'Status':0}
+        
+
+        """# limit
         limit_degree = 150
         simplify_G = fnc.recreate_G(G, 150)
         simplify_G = fnc.renumber(simplify_G)
@@ -57,8 +72,7 @@ class Post_GeoJson(Resource):
         gc.collect()
 
         print(dict(simplify_G.nodes()))
-
-        return_data = {'done':0}
+        """
 
         return jsonify(return_data)
 
