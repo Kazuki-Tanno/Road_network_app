@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from api import post_geojson_bp
+from api import ts_test_bp
 import os
 
 
@@ -8,6 +9,7 @@ app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
 #app = Flask(__name__, static_folder='../frontend', template_folder='../frontend')
 
 app.register_blueprint(post_geojson_bp)
+app.register_blueprint(ts_test_bp)
 app.config['SECRET_KEY'] = "random_secret_key"
 
 @app.route('/', defaults={'path': ''})

@@ -278,6 +278,8 @@ def recreate_G(G, limit_degree):
 
     return G
 
+
+
 def G_to_JSON(G):
     """
     ネットワークの情報をJSONに落とす関数
@@ -315,6 +317,33 @@ def G_to_JSON(G):
 
     return g_json
 
+
+def JSON_to_G(json):
+    """
+    JSON(dict型)からnetworkxのグラフを生成する関数
+    - input
+        json:{
+            'node':[
+                {'id':0, 'pos':[65.4677, 23.3979], 'latlon':[35.67867, 139.564]},
+                ...
+            ],
+            'edge':[[0,1], [0,3], ...]
+        }
+    - output:
+        G: networkxのグラフ
+    """
+    # グラフインスタンスを作成
+    G = nx.Graph()
+
+    # リストからノードを追加
+    node_list = [ (node['id'], {'pos':node['pos'], 'latlon':node['latlon']}) for node in json['node'] ]
+    G.add_nodes_from(node_list)
+
+    # リストからエッジを追加
+    edge_list = [ tuple(edge) for edge in json['edge'] ]
+    G.add_edges_from(edge_list)
+
+    return G
 
 def G_to_Dataframe(G):
     

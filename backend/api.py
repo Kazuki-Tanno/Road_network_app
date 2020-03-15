@@ -47,7 +47,6 @@ class Post_GeoJson(Resource):
 
             # ネットワークをjson形式に変更
             graph_json = fnc.G_to_JSON(G)
-            print('done')
             
             # session変数に基礎ネットワークを作成済みかを入力
             session['done_network'] = 1
@@ -78,3 +77,29 @@ class Post_GeoJson(Resource):
 
 post_geojson = Api(post_geojson_bp)
 post_geojson.add_resource(Post_GeoJson, '')
+
+
+# json形式のネットワークを受け取るapi(POSTメソッド)/実験用
+# json -> Graph -> jsonに変換し，齟齬がないか検証
+ts_test_bp = Blueprint('ts_test', __name__, url_prefix='/api/ts_test')
+class Ts_test(Resource):
+    def post(self):
+        
+        # データをフロントエンドから受け取る
+        input_data = request.json
+
+        # ネットワークを生成
+        G = fnc.JSON_to_G(input_data)
+        print()
+        print(dict(G.nodes()))
+
+        print()
+        print(dict(G.edges()))
+        
+        # ネットワークからJsonを生成
+        return_data = fnc.G_to_JSON(G)
+
+        return jsonify(return_data)
+
+ts_test = Api(ts_test_bp)
+ts_test.add_resource(Ts_test, '')

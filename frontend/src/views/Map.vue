@@ -24,6 +24,7 @@
   </v-list>
   <br>
 	<v-btn @click="MakeGeoJson">Geojson</v-btn>
+	<v-btn @click="SendNetwork">ネットワーク送信</v-btn>
 	<v-btn @click="ToHome">ホームへ</v-btn>
   <div id="map" style="width:100%; height:600px"></div>
 	
@@ -144,14 +145,28 @@ export default {
 		//ホームへ
 		ToHome: function(){
 			this.$router.push({ path: '/' })
+		},
+
+		// ネットワークをバックエンドへ送る
+		SendNetwork: function(){
+			axios
+				.post('/api/ts_test', this.$store.state.Network)
+				.then(response => {
+					
+					console.log(response.data)
+        })
+        .catch(err => {
+          alert('APIサーバと接続できません')
+        })
 		}
-  }
+	}
+	
 }
 </script>
 
 <style>
 .v-list{
-  height:200px;/* or any height you want */
+  height:100px;/* or any height you want */
 	overflow-y:auto;
 }
 </style>
