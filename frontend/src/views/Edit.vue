@@ -13,7 +13,8 @@ export default {
   // データプロパティ
   data () {
     return {
-      // 入力データ
+			// 入力データ
+			// D3用のテストデータ
       test_network: {
         node: [
 					{id:0, pos:[0,0], latlon:[4,5]},
