@@ -5,6 +5,7 @@
 	<v-btn @click="BiggerNode(-1)">SmollerNode</v-btn>
 	<v-btn @click="ChangeSVG(10)">SVG拡大</v-btn>
 	<v-btn @click="ChangeSVG(-10)">SVG縮小</v-btn>
+	<v-btn @click="SaveFile">保存</v-btn>
 	<br><br>
 
 	<!-- パレットボタン -->
@@ -50,8 +51,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-import * as d3 from 'd3'
+import axios from 'axios';
+import * as d3 from 'd3';
+import { saveAs } from 'file-saver';
 
 export default {
   name: 'EditPage',
@@ -221,6 +223,12 @@ export default {
 	},
 	
   methods: {
+		// CSVの保存
+		SaveFile: function(){
+			var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, 'test.txt');
+		},
+
 		// zoom関数
 		zoomed: function() {
 			var me = this
