@@ -53,7 +53,8 @@
 <script>
 import axios from 'axios';
 import * as d3 from 'd3';
-import { saveAs } from 'file-saver';
+import saveAs from 'file-saver';
+import JSZip from 'jszip'
 
 export default {
   name: 'EditPage',
@@ -225,8 +226,31 @@ export default {
   methods: {
 		// CSVの保存
 		SaveFile: function(){
-			var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
-			saveAs(blob, 'test.txt');
+
+			// ノードcsvを作成
+			// column行
+			var node_csv = "id, x, y \n";
+			var node_id = 0
+
+			this.test_network.node.forEach(element => {
+				node_csv += `${String(node_id)},${String(element.pos[0])},${String(element.pos[1])}\n`;
+				node_id += 1;
+			});
+
+			// エッジcsv
+			var edge_csv = "";
+			this.test_network.edge.forEach(element => {
+				edge_csv += `${String(element.head)},${String(element.tail)}\n`
+			});
+
+			var zip = new JSZip();
+			zip.file("node.csv", node_csv);
+			zip.file("edge.csv", edge_csv);
+			zip.generateAsync({type:"blob"})
+				.then(function(content) {
+					// see FileSaver.js
+					saveAs(content, "road_network.zip");
+				});
 		},
 
 		// zoom関数
@@ -352,11 +376,16 @@ export default {
 							return self.indexOf(x) === i;
 						});
 						var edge_g = d3.select("g.edge")
-						delete_list.forEach(element => {
-							me.DeleteEdge(edge_g, element)
-						});
+						delete_list.forEach(element => { me.DeleteEdge(edge_g, element) });
 
 					}
+				})
+				.on("mouseover", function(d,idx,elem){
+					d3.select(this).attr("stroke", 'red')
+						.attr("stroke-width", me.node_size/5);
+				})
+				.on("mouseout", function(d,idx,elem){
+					d3.select(this).attr("stroke", null);
 				});
 		},
 
@@ -370,7 +399,7 @@ export default {
 				.attr("y1", function(d){return me.YPos(me.GetNodePos(me.test_network.node, d.head)[1])})
 				.attr("x2", function(d){return me.GetNodePos(me.test_network.node, d.tail)[0]})
 				.attr("y2", function(d){return me.YPos(me.GetNodePos(me.test_network.node, d.tail)[1])})
-				.attr("stroke-width", 2)
+				.attr("stroke-width", 4)
 				.attr("stroke", "black")
 				.on("click",function(d,idx,elem){
 					if (me.palette===null) {
@@ -379,6 +408,12 @@ export default {
 					} else if (me.palette==="DeleteEdge"){
 						me.DeleteEdge(g, d.id)
 					}
+				})
+				.on("mouseover", function(d,idx,elem){
+					d3.select(this).attr("stroke", "red");
+				})
+				.on("mouseout", function(d,idx,elem){
+					d3.select(this).attr("stroke", "black");
 				});
 
 		},
