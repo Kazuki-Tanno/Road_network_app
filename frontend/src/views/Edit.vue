@@ -146,7 +146,7 @@ export default {
 		// vueのthisのスコープ範囲の問題を解消
 		var me = this;
 
-		//this.test_network = this.$store.state.Network
+		this.test_network = this.$store.state.Network
 
 		me.InitEdge();
 		me.InitNode();

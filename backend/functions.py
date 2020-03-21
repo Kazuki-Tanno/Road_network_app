@@ -293,7 +293,7 @@ def G_to_JSON(G):
                 ...
             ],
             'edge': [
-                [ 0, 1 ]
+                {'id':0, 'head': 0, 'tail':1 },
             ]
         }
     """
@@ -308,8 +308,8 @@ def G_to_JSON(G):
 
     # エッジのjsonを作成
     edge_json = [
-        list(edge)
-        for edge in G.edges()
+        {'id':i, 'head':list(edge)[0], 'tail':list(edge)[1]}
+        for i, edge in enumerate(list(G.edges()))
     ]
 
     # jsonにまとめて整形
@@ -327,7 +327,7 @@ def JSON_to_G(json):
                 {'id':0, 'pos':[65.4677, 23.3979], 'latlon':[35.67867, 139.564]},
                 ...
             ],
-            'edge':[[0,1], [0,3], ...]
+            'edge':[{'id':0, 'head': 0, 'tail':1 }, ...]
         }
     - output:
         G: networkxのグラフ
@@ -340,7 +340,7 @@ def JSON_to_G(json):
     G.add_nodes_from(node_list)
 
     # リストからエッジを追加
-    edge_list = [ tuple(edge) for edge in json['edge'] ]
+    edge_list = [ tuple([edge['head'], edge['tail']]) for edge in json['edge'] ]
     G.add_edges_from(edge_list)
 
     return G

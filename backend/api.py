@@ -90,11 +90,6 @@ class Ts_test(Resource):
 
         # ネットワークを生成
         G = fnc.JSON_to_G(input_data)
-        print()
-        print(dict(G.nodes()))
-
-        print()
-        print(dict(G.edges()))
         
         # ネットワークからJsonを生成
         return_data = fnc.G_to_JSON(G)
