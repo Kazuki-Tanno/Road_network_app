@@ -5,7 +5,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'HomePage',
+  name: 'MainPage',
 
   // データプロパティ
   data () {
