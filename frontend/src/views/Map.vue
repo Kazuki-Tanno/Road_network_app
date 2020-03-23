@@ -26,8 +26,14 @@
 	<v-btn @click="MakeGeoJson">Geojson</v-btn>
 	<v-btn @click="SendNetwork">ネットワーク送信</v-btn>
 	<v-btn @click="ToHome">ホームへ</v-btn>
+	<v-container>
+		<v-row>Y</v-row>
+		<v-row>
+			<v-col cols="9">
   <div id="map" style="width:100%; height:600px"></div>
-	
+			</v-col>
+		</v-row>
+	</v-container>
 </div>
 </template>
 

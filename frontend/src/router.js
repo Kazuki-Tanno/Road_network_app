@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import HowTo from './views/HowTo.vue'
 import Map from './views/Map.vue'
 import Edit from './views/Edit.vue'
+import Main from './views/Main.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/howto',
       name: 'howto',
       component: HowTo
+    },
+    {
+      path: '/main',
+      name: 'main',
+      component: Main
     }
   ]
 })

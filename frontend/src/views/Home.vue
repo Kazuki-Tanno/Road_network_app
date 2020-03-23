@@ -13,6 +13,7 @@
   <v-btn @click="ToMap">Map</v-btn>
   <v-btn @click="ShowNet">データをコンソール</v-btn>
   <v-btn :to="{ path: '/edit' }">Edit.vue</v-btn>
+  <v-btn :to="{ path: '/main' }">Main</v-btn>
   <br>
   {{ result }}
 </div>
