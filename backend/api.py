@@ -27,7 +27,7 @@ class Post_GeoJson(Resource):
             input_data = request.json
 
             # 辞書 -> 文字列 -> geojsonに変換
-            src = json.dumps(input_data)
+            src = json.dumps(input_data['GeoJson'])
             src = geojson.loads(src)
 
             # shapelyのポリゴン形式に変更
@@ -35,7 +35,7 @@ class Post_GeoJson(Resource):
             polygon = shape(ftr.get('geometry'))
 
             # ポリゴンからnetworkxオブジェクトを生成
-            G_osm = ox.graph_from_polygon(polygon, simplify=False, network_type='drive')
+            G_osm = ox.graph_from_polygon(polygon, simplify=False, network_type=input_data['NetworkType'])
 
             # xy座標系に変換
             # 変換の際の中心座標
@@ -45,8 +45,17 @@ class Post_GeoJson(Resource):
             del G_osm
             gc.collect()
 
+            # limit
+            limit_degree = input_data['SimplifyRate']
+            simplify_G = fnc.recreate_G(G, limit_degree, input_data['DeleteOneNode'])
+            simplify_G = fnc.renumber(simplify_G)
+
+
+            del G
+            gc.collect()
+
             # ネットワークをjson形式に変更
-            graph_json = fnc.G_to_JSON(G)
+            graph_json = fnc.G_to_JSON(simplify_G)
             
             # session変数に基礎ネットワークを作成済みかを入力
             session['done_network'] = 1
@@ -61,18 +70,6 @@ class Post_GeoJson(Resource):
             # エラーの場合
             return_data = {'Status':0}
         
-
-        """# limit
-        limit_degree = 150
-        simplify_G = fnc.recreate_G(G, 150)
-        simplify_G = fnc.renumber(simplify_G)
-
-        del G
-        gc.collect()
-
-        print(dict(simplify_G.nodes()))
-        """
-
         return jsonify(return_data)
 
 post_geojson = Api(post_geojson_bp)

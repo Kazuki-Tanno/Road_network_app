@@ -33,6 +33,9 @@
   <div id="map" style="width:100%; height:600px"></div>
 			</v-col>
 		</v-row>
+		<v-row>
+		<v-card height="1000"></v-card>
+		</v-row>
 	</v-container>
 </div>
 </template>
@@ -174,5 +177,8 @@ export default {
 .v-list{
   height:100px;/* or any height you want */
 	overflow-y:auto;
+}
+#map {
+  z-index: 1;
 }
 </style>

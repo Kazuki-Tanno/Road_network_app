@@ -133,7 +133,8 @@ def G_geo_to_G_xy(G_geo, locating_point):
         y = G_geo_all_node[i]['y']
         
         d_x,d_y = calc_xy(y, x, locating_point[0], locating_point[1])
-        G_xy.add_node(num,pos=[round(d_y,4),round(d_x,4)], latlon=[y,x])
+        #G_xy.add_node(num,pos=[round(d_y,4),round(d_x,4)], latlon=[y,x])
+        G_xy.add_node(num,pos=[round(d_y,4),round(d_x,4)])
         
         num += 1
         
@@ -166,7 +167,7 @@ def remove_G(G, remove_node, new_edge):
     G.remove_node(remove_node)
         
     #weight = culc_weight(G_all_node[new_edge[0]]['pos'], G_all_node[new_edge[1]]['pos'])
-    #G.add_edge(new_edge[0],new_edge[1],weight=weight)
+    G.add_edge(new_edge[0],new_edge[1])
     
     return G
 
@@ -188,21 +189,20 @@ def renumber(G):
         change_dict[i] = num
         
         x = all_node[i]['pos']
-        y = all_node[i]['latlon']
-        new_G.add_node(num,pos=x, latlon=y)
+        #y = all_node[i]['latlon']
+        #new_G.add_node(num,pos=x, latlon=y)
+        new_G.add_node(num,pos=x)
         
         num += 1
     
     # 辺の長さは計算しない
-    """
     for i in all_edge:
         
         start_node = change_dict[i[0]]
         end_node = change_dict[i[1]]
-        weight = all_edge[i]['weight']
+        #weight = all_edge[i]['weight']
         
-        new_G.add_edge(start_node,end_node,weight=weight)
-    """
+        new_G.add_edge(start_node,end_node)
     
     return new_G
 
@@ -238,23 +238,23 @@ def calc_degree(start_1, end_1, start_2, end_2):
     return degree
 
 
-def recreate_G(G, limit_degree):
+def recreate_G(G, limit_degree, DeleteOneNode):
     """ノードの次数とリンクの角度をもとにネットワークを単純化する関数"""
     
     # 全ノードの次数の辞書を作成
     node_order = dict(nx.degree(G))
     
     # 枝葉ノードの削除
-    """one_order_nodes = [key for key, item in node_order.items() if item==1]
-
-    while len(one_order_nodes) != 0:
-        
-        for i in one_order_nodes:
-            G.remove_node(i)
-        
-        node_order = dict(nx.degree(G))
+    if DeleteOneNode==1:
         one_order_nodes = [key for key, item in node_order.items() if item==1]
-    """
+
+        while len(one_order_nodes) != 0:
+            
+            for i in one_order_nodes:
+                G.remove_node(i)
+            
+            node_order = dict(nx.degree(G))
+            one_order_nodes = [key for key, item in node_order.items() if item==1]
     
     # 全ノードの辞書作成
     all_nodes = dict(G.nodes)
@@ -302,7 +302,8 @@ def G_to_JSON(G):
 
     # ノードのjsonを作成
     node_json = [
-        {'id':index, 'pos':item['pos'], 'latlon':item['latlon']}
+        #{'id':index, 'pos':item['pos'], 'latlon':item['latlon']}
+        {'id':index, 'pos':item['pos']}
         for index, item in all_nodes.items()
     ]
 
@@ -336,7 +337,11 @@ def JSON_to_G(json):
     G = nx.Graph()
 
     # リストからノードを追加
-    node_list = [ (node['id'], {'pos':node['pos'], 'latlon':node['latlon']}) for node in json['node'] ]
+    node_list = [
+        #(node['id'], {'pos':node['pos'], 'latlon':node['latlon']})
+        (node['id'], {'pos':node['pos']})
+        for node in json['node']
+    ]
     G.add_nodes_from(node_list)
 
     # リストからエッジを追加
