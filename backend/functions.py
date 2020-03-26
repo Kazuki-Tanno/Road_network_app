@@ -258,6 +258,7 @@ def recreate_G(G, limit_degree, DeleteOneNode):
     
     # 全ノードの辞書作成
     all_nodes = dict(G.nodes)
+    node_order = dict(nx.degree(G))
     
     # 次数が2であるノードのリストを作成
     two_order_nodes = [key for key, item in node_order.items() if item==2]
@@ -267,14 +268,17 @@ def recreate_G(G, limit_degree, DeleteOneNode):
         neighbors_node = list(G.neighbors(i))
         
         start_1, start_2 = all_nodes[i]['pos'], all_nodes[i]['pos']
+
         end_1 = all_nodes[neighbors_node[0]]['pos']
         end_2 = all_nodes[neighbors_node[1]]['pos']
+
+        condition = neighbors_node[0] not in list(G.neighbors(neighbors_node[1]))
         
         # ベクトルの角度がlimit_degreeを超えたとき
-        if calc_degree(start_1, end_1, start_2, end_2) > limit_degree:
+        if calc_degree(start_1, end_1, start_2, end_2) > limit_degree and condition:
             
             new_edge = neighbors_node
-            remove_G(G, i, new_edge)
+            G = remove_G(G, i, new_edge)
 
     return G
 

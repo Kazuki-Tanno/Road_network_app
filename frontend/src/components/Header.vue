@@ -3,13 +3,17 @@
     <v-app-bar
       app
       elevation=1
-      color="brown lighten-3"
+      dense
     >
       <v-btn
-        large
         @click="root"
         text
       > Road Network Maker
+      </v-btn>
+    <v-spacer></v-spacer>
+      <v-btn
+        text
+      > How to use
       </v-btn>
     </v-app-bar>
   </div>

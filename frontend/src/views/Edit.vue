@@ -39,10 +39,12 @@
 	{{ transform.x }}/{{ transform.y }}/{{ transform.k }}
 	<br>
 
+<v-card>
 	<svg :width="width" :height="height" :viewBox="viewBox"
 	:style="style" class="Network">
 	<g class="Network" ></g>
 	</svg>
+</v-card>
 	<br>
 	{{ test_network.node }}
 	<br>
@@ -187,7 +189,10 @@ export default {
 
 				// データにプッシュ
 				// idは現配列に格納されているidの最大値+1
-				var id = me.test_network.node.reduce((a,b)=>a.id>b.id?a:b).id + 1;
+				var id = 0;
+				if (me.test_network.node.length!==0){
+					id = me.test_network.node.reduce((a,b)=>a.id>b.id?a:b).id + 1;
+				}
 				var add_data = {"id":id, "pos":MousePos};
 				me.test_network.node.push(add_data);
 
@@ -341,7 +346,10 @@ export default {
 						if (me.palette_sub=="SearchNode") { // tailノードを探しているとき
 							if (me.CanAddEdge(me.now_target_node, d.id)) { // もしedgeをちゃんと追加できるなら
 
-								var id = me.test_network.edge.reduce((a,b)=>a.id>b.id?a:b).id + 1
+								var id = 0;
+								if(me.test_network.edge.length!==0){
+                  id = me.test_network.edge.reduce((a,b)=>a.id>b.id?a:b).id + 1;
+								}
 								var add_data = {"id":id, "head":me.now_target_node, "tail":d.id}
 								me.test_network.edge.push(add_data)
 
@@ -371,7 +379,8 @@ export default {
 							if (element.head===d.id || element.tail===d.id ) {
 								delete_list.push(element.id)
 							}
-						});
+            });
+
 						delete_list = delete_list.filter(function (x, i, self) {
 							return self.indexOf(x) === i;
 						});

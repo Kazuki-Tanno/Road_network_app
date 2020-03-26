@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    Network: {}
+    Network: {node:[], edge:[]}
   },
   mutations: {
     UpdateNetwork(state, payload){
