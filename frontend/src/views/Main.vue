@@ -375,7 +375,7 @@ export default {
         'SimplifyRate':this.SimplifyRate,
         'DeleteOneNode':this.DeleteOneNode
       };
-			if (return_data['GeoJson']['features'].length > 0) {
+			if (return_data['GeoJson']['features'].length === 1) {
         
         // ローディング画面
         this.overlay = true;
@@ -398,9 +398,11 @@ export default {
           alert('APIサーバと接続できません');
         });
 			}
-			else{
+			else if(return_data['GeoJson']['features'].length === 0){
 				alert('geojsonを作成してください');
-			}
+			}else{
+        alert('複数の多角形が作成されています (作成する多角形は1つのみにしてください)')
+      }
     },
     
     /* Edit関連 */
