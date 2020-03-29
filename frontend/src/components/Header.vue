@@ -18,6 +18,7 @@
       </v-btn>
     </v-app-bar>
 
+    <!-- how to use欄 -->
     <v-dialog
       v-model="dialog"
       fullscreen
@@ -28,10 +29,12 @@
       <v-card tile>
         <v-toolbar
           flat
+          dark
         >
           <v-btn
             icon
             @click="dialog = false"
+            dark
           >
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -43,10 +46,10 @@
               three-line
               subheader
             >
-              <v-subheader>sub header</v-subheader>
+              <v-subheader>地図からネットワークを作成</v-subheader>
               <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-title>Title</v-list-item-title>
+                  <v-list-item-title>多角形の作成</v-list-item-title>
                   <v-list-item-subtitle>contents</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
