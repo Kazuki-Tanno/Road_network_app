@@ -38,7 +38,7 @@ class Post_GeoJson(Resource):
         G_osm = ox.graph_from_polygon(polygon, simplify=False, network_type=input_data['NetworkType'])
 
         # xy座標系に変換
-        # 変換の際の中心座標
+        # 変換の際の中心座標を計算
         locating_point = fnc.culc_center_latlon(G_osm)
         G, _ = fnc.G_geo_to_G_xy(G_osm, locating_point)
 
