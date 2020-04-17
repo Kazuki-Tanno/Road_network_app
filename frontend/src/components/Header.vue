@@ -11,11 +11,13 @@
       > Road Network Maker
       </v-btn>
     <v-spacer></v-spacer>
+    <!--
       <v-btn
         text
         @click="dialog = true"
       > How to use
       </v-btn>
+    -->
     </v-app-bar>
 
     <!-- how to use欄 -->
