@@ -321,7 +321,9 @@ export default {
     MapInit: function(){
       // mapオブジェクトを作成
       this.map = L.map('map', { center: L.latLng( 35.6825, 139.752778 ), zoom: 15 } ).addLayer(
-      L.tileLayer( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png' ));
+      L.tileLayer( 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+} ));
       // 描画レイヤの初期化
       var drawnItems = new L.FeatureGroup().addTo(this.map);
       var drawControl = new L.Control.Draw({
