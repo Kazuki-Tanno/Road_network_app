@@ -197,8 +197,22 @@
 
   <!-- 出力ボタン -->
   <v-row dense justify="end">
+  <v-col cols="4">
+    <v-card outlined height="40">
+    <v-card-text class="py-2 px-2">
+      ノード数 : {{ RoadNetwork.node.length }}
+    </v-card-text>
+    </v-card>
+  </v-col>
+  <v-col cols="4">
+    <v-card outlined height="40">
+    <v-card-text class="py-2 px-2">
+      エッジ数 : {{ RoadNetwork.edge.length }}
+    </v-card-text>
+    </v-card>
+  </v-col>
   <v-col cols="3">
-    <v-btn @click="SaveFile" outlined>CSVで保存</v-btn>
+    <v-btn height="40" @click="SaveFile" outlined>CSVで保存</v-btn>
   </v-col>
   </v-row>
 
