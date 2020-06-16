@@ -717,18 +717,24 @@ export default {
 
 			// ノードcsvを作成
 			// column行
-			var node_csv = "id, x, y \n";
-			var node_id = 0
+			var node_csv = "id,x,y\n";
+      var node_id = 0;
+      
+      // 保存する際のノード番号の変換辞書
+      var trans_list = {};
 
 			this.RoadNetwork.node.forEach(element => {
-				node_csv += `${String(node_id)},${String(element.pos[0])},${String(element.pos[1])}\n`;
+        node_csv += `${String(node_id)},${String(element.pos[0])},${String(element.pos[1])}\n`;
+        trans_list[element.id] = node_id;
 				node_id += 1;
 			});
 
 			// エッジcsv
 			var edge_csv = "";
 			this.RoadNetwork.edge.forEach(element => {
-				edge_csv += `${String(element.head)},${String(element.tail)}\n`
+        var head_id = trans_list[element.head];
+        var tail_id = trans_list[element.tail];
+				edge_csv += `${String(head_id)},${String(tail_id)}\n`;
 			});
 
 			var zip = new JSZip();
